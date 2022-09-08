@@ -89,6 +89,7 @@ class Gasp(Ui_MainWindow):
         self.height.setDisabled(True)
         self.screentshot.clicked.connect(self.catchScreen)
 
+        self.save_template.clicked.connect(self.saveTemplate)
 
         # self.openButton.clicked.connect(self.select_files)
         # self.rotateCwButton.clicked.connect(lambda: self.graphicsView.rotate_pixmap(45))
@@ -170,25 +171,28 @@ class Gasp(Ui_MainWindow):
         self.scene.setSceneRect(QtCore.QRectF(rect))
         self.graphicsView.fitInView(pixmap_item.boundingRect(), QtCore.Qt.KeepAspectRatio)
 
+    def saveTemplate(self):
+        rect = self.graphicsView.rect_item.boundingRect()  #
+        rect.x()
+        rect.y()
+        print(rect)
+        # self.graphicsView.removeRect()
+        # self.last_rect = rect
+        # self.last_rotation = self.graphicsView.current_pixmap_item.rotation()
+        # outImg = QtGui.QPixmap(rect.width(), rect.height())
+        # painter = QtGui.QPainter(outImg)
+        # self.scene.setSceneRect(rect)
+        # self.scene.render(painter)
 
-
-    def load_image(self, image_path):
-        self.scene.clear()
-        pixmap = QtGui.QPixmap(image_path)
-        pixmap_item = self.scene.addPixmap(pixmap)         # type: QtWidgets.QGraphicsPixmapItem
-        self.graphicsView.current_pixmap_item = pixmap_item
-        self.graphicsView.rotate_pixmap(self.last_rotation)
-        if self.last_rect is not None:
-            self.graphicsView.rect_item = self.scene.addRect(self.last_rect)
-        rect = pixmap.rect()  # type: QtCore.QRect
-        rect.setWidth(rect.width() * 2)
-        rect.setHeight(rect.height() * 2)
-        rect.setLeft(rect.x() - rect.width() / 2)
-        rect.setTop(rect.y() - rect.height() / 2)
-        self.scene.setSceneRect(QtCore.QRectF(rect))
-        self.graphicsView.fitInView(pixmap_item.boundingRect(), QtCore.Qt.KeepAspectRatio)
-
-
+        # out_dir = os.path.dirname(self.files[0]) + "/cropped/"  # TODO improve output
+        # name = os.path.basename(self.files[0])
+        # name, _ = os.path.splitext(name)
+        # os.makedirs(out_dir, exist_ok=True)
+        # path = out_dir + name + ".png"
+        # outImg.save(path, "PNG")
+        # painter.end()
+        # del self.files[0]
+        # self.load_next_image()
 
     def load_next_image(self):
         self.graphicsView.current_pixmap_item = None
