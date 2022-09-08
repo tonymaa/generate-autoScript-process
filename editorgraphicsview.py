@@ -1,10 +1,13 @@
+import PyQt5
 from PyQt5 import QtCore, QtWidgets, QtGui
+from PyQt5.QtGui import QPen, QBrush
 
 
 class EditorGraphicsView(QtWidgets.QGraphicsView):
 
     def __init__(self, parent=None):
         QtWidgets.QGraphicsView.__init__(self)
+        self.setPositionInput = None
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.lastP = None
@@ -49,7 +52,12 @@ class EditorGraphicsView(QtWidgets.QGraphicsView):
             scene = self.scene()    # type: QtWidgets.QGraphicsScene
             if self.selected_rect is not None:
                 polygon = self.mapToScene(self.selected_rect)  # type: QtCore.QPolygon
-                self.rect_item = scene.addRect(polygon.boundingRect())
+                # self.rect_item = scene.addRect(polygon.boundingRect())
+                if self.setPositionInput is not None and not self.setPositionInput(polygon.boundingRect()):
+                    return
+                q_pen = QPen(PyQt5.QtCore.Qt.red, 2, PyQt5.QtCore.Qt.SolidLine)
+                self.rect_item = scene.addRect(polygon.boundingRect(), pen=q_pen)
+
 
     def keyPressEvent(self, e: QtGui.QKeyEvent):
         QtWidgets.QGraphicsView.keyPressEvent(self, e)

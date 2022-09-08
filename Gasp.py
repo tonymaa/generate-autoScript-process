@@ -59,6 +59,8 @@ class Gasp(Ui_MainWindow):
         self.deviceIds = None
         self.selectedDeviceIndex = 0
         self.windowHandler = None
+        self.windowWidth = 0
+        self.windowHeight = 0
 
         self.scene = QtWidgets.QGraphicsScene()
         self.files = []
@@ -69,6 +71,7 @@ class Gasp(Ui_MainWindow):
         self.last_rect = None
         self.last_rotation = 0
 
+
     def built(self):
         # self.openShortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+O"), self.centralwidget)
         # self.saveShortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+S"), self.centralwidget)
@@ -77,6 +80,7 @@ class Gasp(Ui_MainWindow):
 
         self.graphicsView.setScene(self.scene)
         self.scene.setBackgroundBrush(QtCore.Qt.white)
+        self.graphicsView.setPositionInput = self.setPositionInput
 
         self.openProcess.triggered.connect(self.select_dir) # 打开process按钮
         self.choose_phone.setDisabled(True) # 选择windows窗口
@@ -89,7 +93,12 @@ class Gasp(Ui_MainWindow):
         self.height.setDisabled(True)
         self.screentshot.clicked.connect(self.catchScreen)
 
-        self.save_template.clicked.connect(self.saveTemplate)
+        self.save_template.clicked.connect(self.saveTemplate) # 保存
+
+        self.pos_x.setDisabled(True)
+        self.pos_y.setDisabled(True)
+        self.randomRightOffset.setDisabled(True)
+        self.randomBottomOffset.setDisabled(True)
 
         # self.openButton.clicked.connect(self.select_files)
         # self.rotateCwButton.clicked.connect(lambda: self.graphicsView.rotate_pixmap(45))
@@ -149,9 +158,13 @@ class Gasp(Ui_MainWindow):
         if height <= 0 or width <= 0:
             height = 600
             width = 800
+        self.windowWidth = width
+        self.windowHeight = height
         win32gui.MoveWindow(self.windowHandler, 0, 0, width, height, True)
 
     def catchScreen(self):
+        self.graphicsView.removeRect()
+        print(self.files)
         screen = front_window_screen(self.windowHandler, True)
         height, width, depth = screen.shape
         screen = cv2.cvtColor(screen, cv2.COLOR_BGR2RGB)
@@ -171,10 +184,25 @@ class Gasp(Ui_MainWindow):
         self.scene.setSceneRect(QtCore.QRectF(rect))
         self.graphicsView.fitInView(pixmap_item.boundingRect(), QtCore.Qt.KeepAspectRatio)
 
+    def setPositionInput(self, rect):
+        # 更新input框的x1,y1, x2, y2
+        x1 = rect.x()
+        x2 = rect.y()
+        rightOffset = rect.width()
+        bottomOffset = rect.height()
+        if x1 < 0 or x2 < 0 or x1 + rightOffset > self.windowWidth or x2 + bottomOffset > self.windowHeight: return False
+        self.pos_x.setText(str(round(x1)))
+        self.pos_y.setText(str(round(x2)))
+        self.randomRightOffset.setText(str(round(rightOffset)))
+        self.randomBottomOffset.setText(str(round(bottomOffset)))
+        return True
+
     def saveTemplate(self):
         rect = self.graphicsView.rect_item.boundingRect()  #
         rect.x()
         rect.y()
+        rect.width()
+        rect.height()
         print(rect)
         # self.graphicsView.removeRect()
         # self.last_rect = rect
