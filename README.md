@@ -40,3 +40,8 @@
        default: None
    18. 【finish event】所有操作都执行完后的事件：自定义函数，函数须与当前图片同一文件夹，且函数文件名为：函数名.py
        default: None
+
+点击adb mode 闪退问题：
+    * 由于缺少 【AdbWinApi.dll】
+    * 将【AdbWinApi.dll】放置到 C:\Windows\SysWOW64 目录下，即可解决
+    
