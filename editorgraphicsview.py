@@ -23,7 +23,8 @@ class EditorGraphicsView(QtWidgets.QGraphicsView):
             self.scene().removeItem(self.rect_item)
             self.rect_item = None
             self.selected_rect = None
-            self.setPositionInput(None)
+            if self.setPositionInput is not None:
+                self.setPositionInput(None)
 
     def wheelEvent(self, e: QtGui.QWheelEvent):
         self.setTransformationAnchor(QtWidgets.QGraphicsView.NoAnchor)

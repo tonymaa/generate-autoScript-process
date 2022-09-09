@@ -44,7 +44,7 @@ class Gasp(Ui_MainWindow):
 
     def __init__(self, parent=None):
         Ui_MainWindow.__init__(self)
-        self.curProcess = None
+        self.curProcess = r"E:\python\projects\generate-autoScript-process\process\egp"
         self.curMode = constant.WINDOWSMODE
         self.deviceIds = None
         self.selectedDeviceIndex = 0
@@ -91,6 +91,7 @@ class Gasp(Ui_MainWindow):
         self.pos_y.setDisabled(True)
         self.randomRightOffset.setDisabled(True)
         self.randomBottomOffset.setDisabled(True)
+
 
         # self.openButton.clicked.connect(self.select_files)
         # self.rotateCwButton.clicked.connect(lambda: self.graphicsView.rotate_pixmap(45))
@@ -197,18 +198,21 @@ class Gasp(Ui_MainWindow):
         self.graphicsView.fitInView(pixmap_item.boundingRect(), QtCore.Qt.KeepAspectRatio)
 
     def setPositionInput(self, rect):
-        # 更新input框的x1,y1, x2, y2
-        x1, x2, rightOffset, bottomOffset = rect.x(), rect.y(), rect.width(), rect.height()
         res = True
-        if self.curMode == constant.WINDOWSMODE and (x1 < 0 or x2 < 0 or x1 + rightOffset > self.windowWidth or x2 + bottomOffset > self.windowHeight): res = False
-        if self.curMode == constant.ABSMODE and (x1 < 0 or x2 < 0 or x1 + rightOffset > self.phoneWidth or x2 + bottomOffset > self.phoneHeight): res = False
-        if not res or res is None:
+        # 更新input框的x1,y1, x2, y2
+        x1, x2, rightOffset, bottomOffset = -1, -1, -1, -1
+        if rect is not None:
+            x1, x2, rightOffset, bottomOffset = rect.x(), rect.y(), rect.width(), rect.height()
+            if self.curMode == constant.WINDOWSMODE and (x1 < 0 or x2 < 0 or x1 + rightOffset > self.windowWidth or x2 + bottomOffset > self.windowHeight): res = False
+            if self.curMode == constant.ABSMODE and (x1 < 0 or x2 < 0 or x1 + rightOffset > self.phoneWidth or x2 + bottomOffset > self.phoneHeight): res = False
+        if not res:
             x1, x2, rightOffset, bottomOffset = -1, -1, -1, -1
         self.pos_x.setText(str(round(x1)))
         self.pos_y.setText(str(round(x2)))
         self.randomRightOffset.setText(str(round(rightOffset)))
         self.randomBottomOffset.setText(str(round(bottomOffset)))
-        return res
+        return res and rect is not None
+
 
     def saveTemplate(self):
         # 获取数据
@@ -238,14 +242,14 @@ class Gasp(Ui_MainWindow):
         process = f"{delayTime}_{randomDelayTime}_{pos_x}x{pos_y}_{randomRightOffset}_{randomBottomOffset}_{delayUpTime}_{delayRandomUpTime}_{randomOffsetWhenUp}_{loopLeastCount}_{loopLeastCount}_{loopDelayLeastTime}_{loopDelayRandomTime}_{endDelayLeastTime}_{endDelayRandomTime}_{threshold}_{useMatchingPosition}_{matchEvent}_{finishEvent}.png"
         print(process)
 
+        # 截取图片，保存
         rect = self.graphicsView.rect_item.boundingRect()  # type
-        self.graphicsView.removeRect() # error
-        print(rect)
+        self.graphicsView.removeRect()
         outImg = QtGui.QPixmap(rect.width(), rect.height())
         painter = QtGui.QPainter(outImg)
         self.scene.setSceneRect(rect)
         self.scene.render(painter)
-        outImg.save("./process/egp/" + process, "PNG")
+        outImg.save(os.path.join(self.curProcess, process), "PNG")
         painter.end()
 
     def load_next_image(self):
