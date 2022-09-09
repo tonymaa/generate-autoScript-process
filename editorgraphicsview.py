@@ -23,6 +23,7 @@ class EditorGraphicsView(QtWidgets.QGraphicsView):
             self.scene().removeItem(self.rect_item)
             self.rect_item = None
             self.selected_rect = None
+            self.setPositionInput(None)
 
     def wheelEvent(self, e: QtGui.QWheelEvent):
         self.setTransformationAnchor(QtWidgets.QGraphicsView.NoAnchor)
@@ -52,7 +53,6 @@ class EditorGraphicsView(QtWidgets.QGraphicsView):
             scene = self.scene()    # type: QtWidgets.QGraphicsScene
             if self.selected_rect is not None:
                 polygon = self.mapToScene(self.selected_rect)  # type: QtCore.QPolygon
-                # self.rect_item = scene.addRect(polygon.boundingRect())
                 if self.setPositionInput is not None and not self.setPositionInput(polygon.boundingRect()):
                     return
                 q_pen = QPen(PyQt5.QtCore.Qt.red, 2, PyQt5.QtCore.Qt.SolidLine)

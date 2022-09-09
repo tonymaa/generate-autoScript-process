@@ -127,7 +127,7 @@
       <item row="6" column="2">
        <widget class="QLineEdit" name="randomBottomOffset">
         <property name="text">
-         <string>0</string>
+         <string>-1</string>
         </property>
        </widget>
       </item>
@@ -148,7 +148,7 @@
       <item row="4" column="2">
        <widget class="QLineEdit" name="pos_y">
         <property name="text">
-         <string>0</string>
+         <string>-1</string>
         </property>
        </widget>
       </item>
@@ -258,7 +258,7 @@
       <item row="3" column="2">
        <widget class="QLineEdit" name="pos_x">
         <property name="text">
-         <string>0</string>
+         <string>-1</string>
         </property>
        </widget>
       </item>
@@ -279,7 +279,7 @@
       <item row="5" column="2">
        <widget class="QLineEdit" name="randomRightOffset">
         <property name="text">
-         <string>0</string>
+         <string>-1</string>
         </property>
        </widget>
       </item>

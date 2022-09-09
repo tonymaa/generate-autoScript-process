@@ -2,7 +2,7 @@ import cv2
 import win32gui
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtGui import QImage
-
+from subprocess import Popen, PIPE
 from program.GaspUi import Ui_MainWindow
 import os
 import constant
@@ -19,18 +19,8 @@ constant.WINDOWSMODE = 0
 constant.ABSMODE = 1
 
 
-def front_window_screen(hwnd, isKeepActive):
-    """PIL截图方法，不能被遮挡"""
-    if isKeepActive:
-        shell = win32com.client.Dispatch("WScript.Shell")
-        shell.SendKeys('%')
-        SetForegroundWindow(hwnd)  # 窗口置顶
-    # time.sleep(0.2)  # 置顶后等0.2秒再截图
-    x1, y1, x2, y2 = GetWindowRect(hwnd)  # 获取窗口坐标
-    grab_image = ImageGrab.grab((x1, y1, x2, y2))  # 用PIL方法截图
-    im_cv2 = array(grab_image)  # 转换为cv2的矩阵格式
-    # im_opencv = cv2.cvtColor(im_cv2, cv2.COLOR_BGRA2GRAY)
-    return im_cv2
+
+
 
 def cvToQImage(data):
     # 8-bits unsigned, NO. OF CHANNELS=1
@@ -61,6 +51,8 @@ class Gasp(Ui_MainWindow):
         self.windowHandler = None
         self.windowWidth = 0
         self.windowHeight = 0
+        self.phoneWidth = 0
+        self.phoneHeight = 0
 
         self.scene = QtWidgets.QGraphicsScene()
         self.files = []
@@ -89,8 +81,8 @@ class Gasp(Ui_MainWindow):
         self.choose_window.clicked.connect(self.selectWindow) # 选择窗口
         self.screentshot.setDisabled(True)
         self.save_template.setDisabled(True)
-        self.width.setDisabled(True)
-        self.height.setDisabled(True)
+        # self.width.setDisabled(True)
+        # self.height.setDisabled(True)
         self.screentshot.clicked.connect(self.catchScreen)
 
         self.save_template.clicked.connect(self.saveTemplate) # 保存
@@ -124,6 +116,8 @@ class Gasp(Ui_MainWindow):
         self.choose_phone.setDisabled(self.curMode == constant.WINDOWSMODE)
         self.choose_window.setDisabled(self.curMode == constant.ABSMODE)
         if self.curMode == constant.ABSMODE:
+            self.width.setDisabled(True)
+            self.height.setDisabled(True)
             status, deviceIds = HandleUtils.adb_device_status()
             self.choose_phone.clear()
             self.deviceIds = deviceIds
@@ -133,11 +127,15 @@ class Gasp(Ui_MainWindow):
                 for deviceId in deviceIds:
                     self.choose_phone.addItem(deviceId)
         else:
+            self.width.setDisabled(False)
+            self.height.setDisabled(False)
             self.choose_phone.clear()
             self.choose_phone.addItem("Choose Phone")
 
     def selectDevice(self, e):
         self.selectedDeviceIndex = e
+        self.screentshot.setDisabled(False)
+        self.save_template.setDisabled(False)
         print(f"【debug】 select device index: {self.selectedDeviceIndex}, and deviceId is {self.deviceIds[e] if e >= 0 and e < len(self.deviceIds) else 'None'}")
 
     def selectWindow(self):
@@ -164,9 +162,17 @@ class Gasp(Ui_MainWindow):
 
     def catchScreen(self):
         self.graphicsView.removeRect()
-        print(self.files)
-        screen = front_window_screen(self.windowHandler, True)
+        screen = None
+        # return cv2 image type
+        if self.curMode == constant.WINDOWSMODE:
+            screen = ScreenCaptureUtils.front_window_screen(self.windowHandler, False, True)
+        else:
+            screen = ScreenCaptureUtils.adb_screen(self.deviceIds[self.selectedDeviceIndex], False)
+
         height, width, depth = screen.shape
+        if constant.ABSMODE == self.curMode:
+            self.phoneWidth = width
+            self.phoneHeight = height
         screen = cv2.cvtColor(screen, cv2.COLOR_BGR2RGB)
         screen = cvToQImage(screen)
         self.scene.clear()
@@ -186,16 +192,22 @@ class Gasp(Ui_MainWindow):
 
     def setPositionInput(self, rect):
         # 更新input框的x1,y1, x2, y2
-        x1 = rect.x()
-        x2 = rect.y()
-        rightOffset = rect.width()
-        bottomOffset = rect.height()
-        if x1 < 0 or x2 < 0 or x1 + rightOffset > self.windowWidth or x2 + bottomOffset > self.windowHeight: return False
+        x1, x2, rightOffset, bottomOffset = rect.x(), rect.y(), rect.width(), rect.height()
+        # x1 = rect.x()
+        # x2 = rect.y()
+        # rightOffset = rect.width()
+        # bottomOffset = rect.height()
+        # print(rect)
+        res = True
+        if self.curMode == constant.WINDOWSMODE and (x1 < 0 or x2 < 0 or x1 + rightOffset > self.windowWidth or x2 + bottomOffset > self.windowHeight): res = False
+        if self.curMode == constant.ABSMODE and (x1 < 0 or x2 < 0 or x1 + rightOffset > self.phoneWidth or x2 + bottomOffset > self.phoneHeight): res = False
+        if not res or res is None:
+            x1, x2, rightOffset, bottomOffset = -1, -1, -1, -1
         self.pos_x.setText(str(round(x1)))
         self.pos_y.setText(str(round(x2)))
         self.randomRightOffset.setText(str(round(rightOffset)))
         self.randomBottomOffset.setText(str(round(bottomOffset)))
-        return True
+        return res
 
     def saveTemplate(self):
         rect = self.graphicsView.rect_item.boundingRect()  #
