@@ -88,7 +88,6 @@ class ScreenCaptureUtils:
             scr_img = cv2.cvtColor(scr_img, cv2.COLOR_BGRA2GRAY)
         else:
             scr_img = cv2.cvtColor(scr_img, cv2.COLOR_BGR2RGB)
-
         # 测试显示截图图片
         # cv2.namedWindow('scr_img')  # 命名窗口
         # cv2.imshow("scr_img", scr_img)  # 显示

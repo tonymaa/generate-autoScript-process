@@ -123,7 +123,9 @@ class Gasp(Ui_MainWindow):
             self.deviceIds = deviceIds
             if not status:
                 self.choose_phone.addItem("no device detected!")
+                self.runningLog.setText(f'【warning】 没找到任何设备！')
             else:
+                self.runningLog.setText(f'【info】 已切换到abs模式，请选择设备。')
                 for deviceId in deviceIds:
                     self.choose_phone.addItem(deviceId)
         else:
@@ -131,12 +133,16 @@ class Gasp(Ui_MainWindow):
             self.height.setDisabled(False)
             self.choose_phone.clear()
             self.choose_phone.addItem("Choose Phone")
+            self.runningLog.setText(f'【info】 已切换到windows模式，点击截图后，选择窗口。')
+
 
     def selectDevice(self, e):
         self.selectedDeviceIndex = e
         self.screentshot.setDisabled(False)
         self.save_template.setDisabled(False)
         print(f"【debug】 select device index: {self.selectedDeviceIndex}, and deviceId is {self.deviceIds[e] if e >= 0 and e < len(self.deviceIds) else 'None'}")
+        if e >= 0 and e < len(self.deviceIds):
+            self.runningLog.setText(f'【选中设备】 {self.deviceIds[e]}')
 
     def selectWindow(self):
         QtWidgets.QMessageBox.information(None, 'Info', f'请在5秒内选择窗口！')
@@ -193,11 +199,6 @@ class Gasp(Ui_MainWindow):
     def setPositionInput(self, rect):
         # 更新input框的x1,y1, x2, y2
         x1, x2, rightOffset, bottomOffset = rect.x(), rect.y(), rect.width(), rect.height()
-        # x1 = rect.x()
-        # x2 = rect.y()
-        # rightOffset = rect.width()
-        # bottomOffset = rect.height()
-        # print(rect)
         res = True
         if self.curMode == constant.WINDOWSMODE and (x1 < 0 or x2 < 0 or x1 + rightOffset > self.windowWidth or x2 + bottomOffset > self.windowHeight): res = False
         if self.curMode == constant.ABSMODE and (x1 < 0 or x2 < 0 or x1 + rightOffset > self.phoneWidth or x2 + bottomOffset > self.phoneHeight): res = False
@@ -210,29 +211,42 @@ class Gasp(Ui_MainWindow):
         return res
 
     def saveTemplate(self):
-        rect = self.graphicsView.rect_item.boundingRect()  #
-        rect.x()
-        rect.y()
-        rect.width()
-        rect.height()
-        print(rect)
-        # self.graphicsView.removeRect()
-        # self.last_rect = rect
-        # self.last_rotation = self.graphicsView.current_pixmap_item.rotation()
-        # outImg = QtGui.QPixmap(rect.width(), rect.height())
-        # painter = QtGui.QPainter(outImg)
-        # self.scene.setSceneRect(rect)
-        # self.scene.render(painter)
+        # 获取数据
+        delayTime = self.delayTime.text()
+        randomDelayTime = self.randomDelayTime.text()
+        pos_x = self.pos_x.text()
+        pos_y = self.pos_y.text()
+        randomRightOffset = self.randomRightOffset.text()
+        randomBottomOffset = self.randomBottomOffset.text()
+        delayUpTime = self.delayUpTime.text()
+        delayRandomUpTime = self.delayRandomUpTime.text()
+        randomOffsetWhenUp = self.randomOffsetWhenUp.text()
+        loopLeastCount = self.loopLeastCount.text()
+        loopRandomCount = self.loopRandomCount.text()
+        loopDelayLeastTime = self.loopDelayLeastTime.text()
+        loopDelayRandomTime = self.loopDelayRandomTime.text()
+        endDelayLeastTime = self.endDelayLeastTime.text()
+        endDelayRandomTime = self.endDelayRandomTime.text()
+        threshold = self.threshold.text()
+        useMatchingPosition = self.useMatchingPosition.text()
+        matchEvent = self.matchEvent.text()
+        finishEvent = self.finishEvent.text()
+        if pos_x == "-1" or pos_y == "-1" or randomRightOffset == "-1" or randomBottomOffset == "-1":
+            QtWidgets.QMessageBox.information(None, 'warning', f'请截图，再选择区域！')
+            self.runningLog.setText("【warning】请截图，再选择区域！")
+            return
+        process = f"{delayTime}_{randomDelayTime}_{pos_x}x{pos_y}_{randomRightOffset}_{randomBottomOffset}_{delayUpTime}_{delayRandomUpTime}_{randomOffsetWhenUp}_{loopLeastCount}_{loopLeastCount}_{loopDelayLeastTime}_{loopDelayRandomTime}_{endDelayLeastTime}_{endDelayRandomTime}_{threshold}_{useMatchingPosition}_{matchEvent}_{finishEvent}.png"
+        print(process)
 
-        # out_dir = os.path.dirname(self.files[0]) + "/cropped/"  # TODO improve output
-        # name = os.path.basename(self.files[0])
-        # name, _ = os.path.splitext(name)
-        # os.makedirs(out_dir, exist_ok=True)
-        # path = out_dir + name + ".png"
-        # outImg.save(path, "PNG")
-        # painter.end()
-        # del self.files[0]
-        # self.load_next_image()
+        rect = self.graphicsView.rect_item.boundingRect()  # type
+        self.graphicsView.removeRect() # error
+        print(rect)
+        outImg = QtGui.QPixmap(rect.width(), rect.height())
+        painter = QtGui.QPainter(outImg)
+        self.scene.setSceneRect(rect)
+        self.scene.render(painter)
+        outImg.save("./process/egp/" + process, "PNG")
+        painter.end()
 
     def load_next_image(self):
         self.graphicsView.current_pixmap_item = None
@@ -244,25 +258,25 @@ class Gasp(Ui_MainWindow):
             text_item = self.scene.addText("No images left !")
             self.graphicsView.fitInView(text_item.boundingRect(), QtCore.Qt.KeepAspectRatio)
 
-    def save_image(self):
-        if self.graphicsView.rect_item is not None and len(self.files) > 0:
-            rect = self.graphicsView.rect_item.boundingRect()   # type
-            self.graphicsView.removeRect()
-            self.last_rect = rect
-            self.last_rotation = self.graphicsView.current_pixmap_item.rotation()
-            outImg = QtGui.QPixmap(rect.width(), rect.height())
-            painter = QtGui.QPainter(outImg)
-            self.scene.setSceneRect(rect)
-            self.scene.render(painter)
-            out_dir = os.path.dirname(self.files[0]) + "/cropped/"      # TODO improve output
-            name = os.path.basename(self.files[0])
-            name, _ = os.path.splitext(name)
-            os.makedirs(out_dir, exist_ok=True)
-            path = out_dir + name + ".png"
-            outImg.save(path, "PNG")
-            painter.end()
-            del self.files[0]
-            self.load_next_image()
+    # def save_image(self):
+    #     if self.graphicsView.rect_item is not None and len(self.files) > 0:
+    #         rect = self.graphicsView.rect_item.boundingRect()   # type
+    #         self.graphicsView.removeRect()
+    #         self.last_rect = rect
+    #         self.last_rotation = self.graphicsView.current_pixmap_item.rotation()
+    #         outImg = QtGui.QPixmap(rect.width(), rect.height())
+    #         painter = QtGui.QPainter(outImg)
+    #         self.scene.setSceneRect(rect)
+    #         self.scene.render(painter)
+    #         out_dir = os.path.dirname(self.files[0]) + "/cropped/"      # TODO improve output
+    #         name = os.path.basename(self.files[0])
+    #         name, _ = os.path.splitext(name)
+    #         os.makedirs(out_dir, exist_ok=True)
+    #         path = out_dir + name + ".png"
+    #         outImg.save(path, "PNG")
+    #         painter.end()
+    #         del self.files[0]
+    #         self.load_next_image()
 
     def drop_handler(self, e: QtGui.QDropEvent):
         urls = e.mimeData().urls()
