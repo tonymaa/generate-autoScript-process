@@ -44,7 +44,7 @@ class Gasp(Ui_MainWindow):
 
     def __init__(self, parent=None):
         Ui_MainWindow.__init__(self)
-        self.curProcess = r".\process\egp"
+        self.curProcess = None
         self.curMode = constant.WINDOWSMODE
         self.deviceIds = None
         self.selectedDeviceIndex = 0
@@ -93,6 +93,7 @@ class Gasp(Ui_MainWindow):
         self.randomRightOffset.setDisabled(True)
         self.randomBottomOffset.setDisabled(True)
 
+        # self.selectFile.
 
         # self.openButton.clicked.connect(self.select_files)
         # self.rotateCwButton.clicked.connect(lambda: self.graphicsView.rotate_pixmap(45))
@@ -217,29 +218,55 @@ class Gasp(Ui_MainWindow):
         self.randomBottomOffset.setText(str(round(bottomOffset)))
         return res and rect is not None
 
+    def toInt(self, text):
+        res = -1
+        try:
+            res = int(text)
+        except ValueError:
+            pass
+        if res < 0:
+            QtWidgets.QMessageBox.information(None, 'warning', f'{text} 输入不合法！')
+            return -1
+        return res
 
     def saveTemplate(self):
+        if self.curProcess is None: self.select_dir()
         # 获取数据
-        delayTime = self.delayTime.text()
-        randomDelayTime = self.randomDelayTime.text()
-        pos_x = self.pos_x.text()
-        pos_y = self.pos_y.text()
-        randomRightOffset = self.randomRightOffset.text()
-        randomBottomOffset = self.randomBottomOffset.text()
-        delayUpTime = self.delayUpTime.text()
-        delayRandomUpTime = self.delayRandomUpTime.text()
-        randomOffsetWhenUp = self.randomOffsetWhenUp.text()
-        loopLeastCount = self.loopLeastCount.text()
-        loopRandomCount = self.loopRandomCount.text()
-        loopDelayLeastTime = self.loopDelayLeastTime.text()
-        loopDelayRandomTime = self.loopDelayRandomTime.text()
-        endDelayLeastTime = self.endDelayLeastTime.text()
-        endDelayRandomTime = self.endDelayRandomTime.text()
-        threshold = self.threshold.text()
-        useMatchingPosition = self.useMatchingPosition.text()
+        delayTime = self.toInt(self.delayTime.text())
+        if delayTime < 0: return
+        randomDelayTime = self.toInt(self.randomDelayTime.text())
+        if randomDelayTime < 0: return
+        pos_x = int(self.pos_x.text())
+        pos_y = int(self.pos_y.text())
+        randomRightOffset = int(self.randomRightOffset.text())
+        randomBottomOffset = int(self.randomBottomOffset.text())
+        delayUpTime = self.toInt(self.delayUpTime.text())
+        if delayUpTime < 0: return
+        delayRandomUpTime = self.toInt(self.delayRandomUpTime.text())
+        if delayRandomUpTime < 0: return
+        randomOffsetWhenUp = self.toInt(self.randomOffsetWhenUp.text())
+        if randomOffsetWhenUp < 0: return
+        loopLeastCount = self.toInt(self.loopLeastCount.text())
+        if loopLeastCount < 0: return
+        loopRandomCount = self.toInt(self.loopRandomCount.text())
+        if loopRandomCount < 0: return
+        loopDelayLeastTime = self.toInt(self.loopDelayLeastTime.text())
+        if loopDelayLeastTime < 0: return
+        loopDelayRandomTime = self.toInt(self.loopDelayRandomTime.text())
+        if loopDelayRandomTime < 0: return
+        endDelayLeastTime = self.toInt(self.endDelayLeastTime.text())
+        if endDelayLeastTime < 0: return
+        endDelayRandomTime = self.toInt(self.endDelayRandomTime.text())
+        if endDelayRandomTime < 0: return
+        threshold = self.toInt(self.threshold.text())
+        if threshold < 0: return
+        useMatchingPosition = self.toInt(self.useMatchingPosition.text())
+        if useMatchingPosition > 2 or useMatchingPosition < 1:
+            QtWidgets.QMessageBox.information(None, 'warning', f'#17 应该输入1或2！')
+            return
         matchEvent = self.matchEvent.text().strip().replace(" ", "")
         finishEvent = self.finishEvent.text().strip().replace(" ", "")
-        if pos_x == "-1" or pos_y == "-1" or randomRightOffset == "-1" or randomBottomOffset == "-1":
+        if pos_x == -1 or pos_y == -1 or randomRightOffset == -1 or randomBottomOffset == -1:
             QtWidgets.QMessageBox.information(None, 'warning', f'请截图，再选择区域！')
             self.runningLog.setText("【warning】请截图，再选择区域！")
             return
@@ -256,7 +283,6 @@ class Gasp(Ui_MainWindow):
         savePath = os.path.join(self.curProcess, process)
         outImg.save(savePath, "PNG")
         painter.end()
-        self.runningLog.setText(f"【success】已保存到: {savePath}")
 
         # 生成事件脚本文件 xxx.py
         matchEPath = os.path.join(self.curProcess, matchEvent + ".py")
@@ -265,6 +291,9 @@ class Gasp(Ui_MainWindow):
         finishEPath = os.path.join(self.curProcess, finishEvent + ".py")
         if len(finishEvent) != 0 and finishEvent != "None" and not os.path.exists(finishEPath):
             self.generatePyFile(finishEPath)
+
+        self.runningLog.setText(f"【success】已保存到: {savePath}")
+        QtWidgets.QMessageBox.information(None, 'success', f'【success】已保存到: {savePath}')
 
     def generatePyFile(self, path):
         with open(path, mode="w", encoding="utf-8") as w:
