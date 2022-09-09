@@ -148,7 +148,6 @@ class HandleUtils:
         try:
             # HandleSet.deal_cmd(abspath(dirname(__file__)) + r'\adb.exe kill-server')
             command = abspath(dirname(__file__)) + r'\adb.exe devices'  # adb放在modules目录下，不用那么麻烦安装adb命令了
-            print(command)
             # result = HandleSet.deal_cmd('adb devices')
             # command = abspath(dirname(__file__)) + r'\adb.exe connect 127.0.0.1:7555'
             result = HandleUtils.deal_cmd(command)
