@@ -441,16 +441,21 @@ p, li { white-space: pre-wrap; }
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionNew_Process"/>
     <addaction name="openProcess"/>
    </widget>
-   <widget class="QMenu" name="menuView">
+   <widget class="QMenu" name="selectFile">
     <property name="title">
      <string>Select</string>
     </property>
    </widget>
+   <widget class="QMenu" name="workingDir">
+    <property name="title">
+     <string>Working Directory</string>
+    </property>
+   </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuView"/>
+   <addaction name="selectFile"/>
+   <addaction name="workingDir"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionNew_Process">

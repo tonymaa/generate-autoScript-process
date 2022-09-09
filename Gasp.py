@@ -44,7 +44,7 @@ class Gasp(Ui_MainWindow):
 
     def __init__(self, parent=None):
         Ui_MainWindow.__init__(self)
-        self.curProcess = r"E:\python\projects\generate-autoScript-process\process\egp"
+        self.curProcess = r".\process\egp"
         self.curMode = constant.WINDOWSMODE
         self.deviceIds = None
         self.selectedDeviceIndex = 0
@@ -81,6 +81,7 @@ class Gasp(Ui_MainWindow):
         self.choose_window.clicked.connect(self.selectWindow) # 选择窗口
         self.screentshot.setDisabled(True)
         self.save_template.setDisabled(True)
+        self.workingDir.setDisabled(True)
         # self.width.setDisabled(True)
         # self.height.setDisabled(True)
         self.screentshot.clicked.connect(self.catchScreen)
@@ -109,8 +110,11 @@ class Gasp(Ui_MainWindow):
         pass
 
     def select_dir(self):
-        self.curProcess = QtWidgets.QFileDialog.getExistingDirectory(None, "Select Directory")
+        curProcess = QtWidgets.QFileDialog.getExistingDirectory(None, "Select Directory")
+        if curProcess is None or curProcess == "": return
+        self.curProcess = curProcess
         print(f"【debug】 select process path: {self.curProcess}")
+        self.workingDir.setTitle(self.curProcess)
 
     def chooseMode(self, e):
         self.curMode = e
@@ -233,8 +237,8 @@ class Gasp(Ui_MainWindow):
         endDelayRandomTime = self.endDelayRandomTime.text()
         threshold = self.threshold.text()
         useMatchingPosition = self.useMatchingPosition.text()
-        matchEvent = self.matchEvent.text()
-        finishEvent = self.finishEvent.text()
+        matchEvent = self.matchEvent.text().strip().replace(" ", "")
+        finishEvent = self.finishEvent.text().strip().replace(" ", "")
         if pos_x == "-1" or pos_y == "-1" or randomRightOffset == "-1" or randomBottomOffset == "-1":
             QtWidgets.QMessageBox.information(None, 'warning', f'请截图，再选择区域！')
             self.runningLog.setText("【warning】请截图，再选择区域！")
@@ -249,8 +253,27 @@ class Gasp(Ui_MainWindow):
         painter = QtGui.QPainter(outImg)
         self.scene.setSceneRect(rect)
         self.scene.render(painter)
-        outImg.save(os.path.join(self.curProcess, process), "PNG")
+        savePath = os.path.join(self.curProcess, process)
+        outImg.save(savePath, "PNG")
         painter.end()
+        self.runningLog.setText(f"【success】已保存到: {savePath}")
+
+        # 生成事件脚本文件 xxx.py
+        matchEPath = os.path.join(self.curProcess, matchEvent + ".py")
+        if len(matchEvent) != 0 and matchEvent != "None" and not os.path.exists(matchEPath):
+            self.generatePyFile(matchEPath)
+        finishEPath = os.path.join(self.curProcess, finishEvent + ".py")
+        if len(finishEvent) != 0 and finishEvent != "None" and not os.path.exists(finishEPath):
+            self.generatePyFile(finishEPath)
+
+    def generatePyFile(self, path):
+        with open(path, mode="w", encoding="utf-8") as w:
+            w.write("""'''
+    Put your code here.
+'''
+# For Example
+# eventAttribute.terminateProcess()
+# print("terminate...")""")
 
     def load_next_image(self):
         self.graphicsView.current_pixmap_item = None
