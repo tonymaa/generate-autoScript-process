@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>896</width>
-    <height>850</height>
+    <width>911</width>
+    <height>854</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,52 +31,38 @@
     </item>
     <item>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="2" column="3">
-       <widget class="QLabel" name="label_12">
+      <item row="6" column="1">
+       <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>12.完成一次点击后的延迟时间(ms)：</string>
+         <string>6.坐标y随机便宜像素：</string>
         </property>
        </widget>
       </item>
-      <item row="9" column="2">
-       <widget class="QLineEdit" name="randomOffsetWhenUp">
+      <item row="4" column="3">
+       <widget class="QLabel" name="label_14">
         <property name="text">
-         <string>3</string>
+         <string>14.完成所有操作后的延迟时间(ms)：</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
-       <widget class="QLabel" name="label_5">
+      <item row="2" column="2">
+       <widget class="QLineEdit" name="randomDelayTime">
         <property name="text">
-         <string>4.坐标y：</string>
+         <string>100</string>
         </property>
        </widget>
       </item>
-      <item row="7" column="1">
-       <widget class="QLabel" name="label_8">
+      <item row="10" column="2">
+       <widget class="QLineEdit" name="loopLeastCount">
         <property name="text">
-         <string>7.延迟抬起鼠标时间(ms)：</string>
+         <string>1</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="1">
-       <widget class="QLabel" name="label_6">
+      <item row="8" column="2">
+       <widget class="QLineEdit" name="delayRandomUpTime">
         <property name="text">
-         <string>5.坐标x随机偏移像素：</string>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="3">
-       <widget class="QLabel" name="label_18">
-        <property name="text">
-         <string>18.匹配成功事件，自定义函数：</string>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="1">
-       <widget class="QLabel" name="label_9">
-        <property name="text">
-         <string>8.额外随机延迟抬起鼠标时间(ms)：</string>
+         <string>30</string>
         </property>
        </widget>
       </item>
@@ -87,75 +73,17 @@
         </property>
        </widget>
       </item>
-      <item row="8" column="4">
-       <widget class="QLineEdit" name="matchEvent">
+      <item row="6" column="4">
+       <widget class="QLineEdit" name="threshold">
         <property name="text">
-         <string>None</string>
+         <string>90</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
-       <widget class="QComboBox" name="choose_phone">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <item>
-         <property name="text">
-          <string>Choose Phone</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>123123</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>121111</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>345252</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="6" column="2">
-       <widget class="QLineEdit" name="randomBottomOffset">
+      <item row="9" column="2">
+       <widget class="QLineEdit" name="randomOffsetWhenUp">
         <property name="text">
-         <string>-1</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="4">
-       <widget class="QLineEdit" name="loopDelayLeastTime">
-        <property name="text">
-         <string>500</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="4">
-       <widget class="QLineEdit" name="endDelayRandomTime">
-        <property name="text">
-         <string>500</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="2">
-       <widget class="QLineEdit" name="pos_y">
-        <property name="text">
-         <string>-1</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="3">
-       <widget class="QLabel" name="label_17">
-        <property name="text">
-         <string>17.匹配成功后，#1:使用预定义坐标；#2:使用找图坐标：</string>
+         <string>3</string>
         </property>
        </widget>
       </item>
@@ -166,10 +94,24 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QLabel" name="label_2">
+      <item row="9" column="4">
+       <widget class="QLineEdit" name="finishEvent">
         <property name="text">
-         <string>1.延迟点击时间(ms)：</string>
+         <string>None</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="2">
+       <widget class="QLineEdit" name="randomRightOffset">
+        <property name="text">
+         <string>-1</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="3">
+       <widget class="QLabel" name="label_19">
+        <property name="text">
+         <string>19.操作执行完成事件，自定义函数：</string>
         </property>
        </widget>
       </item>
@@ -177,13 +119,6 @@
        <widget class="QLineEdit" name="useMatchingPosition">
         <property name="text">
          <string>1</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="3">
-       <widget class="QLabel" name="label_14">
-        <property name="text">
-         <string>14.完成所有操作后的延迟时间(ms)：</string>
         </property>
        </widget>
       </item>
@@ -207,15 +142,75 @@
         </item>
        </widget>
       </item>
-      <item row="2" column="2">
-       <widget class="QLineEdit" name="randomDelayTime">
+      <item row="3" column="4">
+       <widget class="QLineEdit" name="loopDelayRandomTime">
         <property name="text">
-         <string>100</string>
+         <string>200</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
-       <widget class="QLineEdit" name="delayTime">
+      <item row="3" column="3">
+       <widget class="QLabel" name="label_13">
+        <property name="text">
+         <string>13.完成一次点击后的额外随机延迟时间(ms)：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>3.坐标x：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="3">
+       <widget class="QLabel" name="label_16">
+        <property name="text">
+         <string>16.匹配阈值，大于该值时点击(0 - 100)：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="3">
+       <widget class="QLabel" name="label_15">
+        <property name="text">
+         <string>15.完成所有操作后的额外随机延迟时间(ms)：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0" rowspan="3">
+       <widget class="QTextBrowser" name="runningLog">
+        <property name="html">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'SimSun'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Running Log&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="3">
+       <widget class="QLabel" name="label_17">
+        <property name="text">
+         <string>17.匹配成功后，#1:使用预定义坐标；#2:使用找图坐标：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="1">
+       <widget class="QLabel" name="label_9">
+        <property name="text">
+         <string>8.额外随机延迟抬起鼠标时间(ms)：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="1">
+       <widget class="QLabel" name="label_20">
+        <property name="text">
+         <string>10.循环点击次数：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="4">
+       <widget class="QLineEdit" name="endDelayRandomTime">
         <property name="text">
          <string>500</string>
         </property>
@@ -234,80 +229,10 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="3">
-       <widget class="QLabel" name="label_15">
+      <item row="1" column="1">
+       <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>15.完成所有操作后的额外随机延迟时间(ms)：</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="4">
-       <widget class="QLineEdit" name="loopDelayRandomTime">
-        <property name="text">
-         <string>200</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="3">
-       <widget class="QLabel" name="label_13">
-        <property name="text">
-         <string>13.完成一次点击后的额外随机延迟时间(ms)：</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="2">
-       <widget class="QLineEdit" name="pos_x">
-        <property name="text">
-         <string>-1</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3">
-       <widget class="QLabel" name="label_11">
-        <property name="text">
-         <string>11.额外随机循环点击次数：</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="1">
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>6.坐标y随机便宜像素：</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="2">
-       <widget class="QLineEdit" name="randomRightOffset">
-        <property name="text">
-         <string>-1</string>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="3">
-       <widget class="QLabel" name="label_19">
-        <property name="text">
-         <string>19.操作执行完成事件，自定义函数：</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="3">
-       <widget class="QLabel" name="label_16">
-        <property name="text">
-         <string>16.匹配阈值，大于该值时点击(0 - 100)：</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="4">
-       <widget class="QLineEdit" name="endDelayLeastTime">
-        <property name="text">
-         <string>1000</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>2.额外随机延迟点击时间(ms）：</string>
+         <string>1.延迟点击时间(ms)：</string>
         </property>
        </widget>
       </item>
@@ -318,79 +243,19 @@
         </property>
        </widget>
       </item>
-      <item row="8" column="2">
-       <widget class="QLineEdit" name="delayRandomUpTime">
+      <item row="4" column="1">
+       <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>30</string>
+         <string>4.坐标y：</string>
         </property>
        </widget>
       </item>
-      <item row="6" column="4">
-       <widget class="QLineEdit" name="threshold">
-        <property name="text">
-         <string>90</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>3.坐标x：</string>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="4">
-       <widget class="QLineEdit" name="finishEvent">
-        <property name="text">
-         <string>None</string>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="1">
-       <widget class="QLabel" name="label_20">
-        <property name="text">
-         <string>10.循环点击次数：</string>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="2">
-       <widget class="QLineEdit" name="loopLeastCount">
-        <property name="text">
-         <string>1</string>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="0">
-       <widget class="QPushButton" name="save_template">
-        <property name="text">
-         <string>保存</string>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="0">
-       <widget class="QPushButton" name="screentshot">
-        <property name="text">
-         <string>截屏</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="0" rowspan="3">
-       <widget class="QTextBrowser" name="runningLog">
-        <property name="html">
-         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'SimSun'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Running Log&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item row="3" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
          <widget class="QLabel" name="label_21">
           <property name="text">
-           <string>Resize Window width:</string>
+           <string>Window width:</string>
           </property>
          </widget>
         </item>
@@ -417,12 +282,169 @@ p, li { white-space: pre-wrap; }
         </item>
        </layout>
       </item>
-      <item row="5" column="0">
-       <widget class="QToolButton" name="choose_window">
+      <item row="4" column="4">
+       <widget class="QLineEdit" name="endDelayLeastTime">
         <property name="text">
-         <string>Choose Window</string>
+         <string>1000</string>
         </property>
        </widget>
+      </item>
+      <item row="6" column="2">
+       <widget class="QLineEdit" name="randomBottomOffset">
+        <property name="text">
+         <string>-1</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QComboBox" name="choose_phone">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <item>
+           <property name="text">
+            <string>Choose Phone</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>123123</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>121111</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>345252</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="choose_window">
+          <property name="text">
+           <string>Choose Window</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>2.额外随机延迟点击时间(ms）：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QPushButton" name="screentshot">
+        <property name="text">
+         <string>截屏</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QLabel" name="label_11">
+        <property name="text">
+         <string>11.额外随机循环点击次数：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="4">
+       <widget class="QLineEdit" name="matchEvent">
+        <property name="text">
+         <string>None</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QLineEdit" name="pos_x">
+        <property name="text">
+         <string>-1</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="QLineEdit" name="pos_y">
+        <property name="text">
+         <string>-1</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="4">
+       <widget class="QLineEdit" name="loopDelayLeastTime">
+        <property name="text">
+         <string>500</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="QLabel" name="label_12">
+        <property name="text">
+         <string>12.完成一次点击后的延迟时间(ms)：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>7.延迟抬起鼠标时间(ms)：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLineEdit" name="delayTime">
+        <property name="text">
+         <string>500</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>5.坐标x随机偏移像素：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="0">
+       <widget class="QPushButton" name="save_template">
+        <property name="text">
+         <string>保存</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="3">
+       <widget class="QLabel" name="label_18">
+        <property name="text">
+         <string>18.匹配成功事件，自定义函数：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QRadioButton" name="selectCaptreArea">
+          <property name="text">
+           <string>选择截图区域(红线)</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="selectClickArea">
+          <property name="text">
+           <string>选择点击区域（蓝线）</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
@@ -433,7 +455,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>896</width>
+     <width>911</width>
      <height>23</height>
     </rect>
    </property>

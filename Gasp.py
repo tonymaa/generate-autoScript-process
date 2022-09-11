@@ -1,3 +1,4 @@
+import PyQt5.Qt
 import cv2
 import win32gui
 from PyQt5 import QtCore, QtWidgets, QtGui
@@ -54,6 +55,8 @@ class Gasp(Ui_MainWindow):
         self.phoneWidth = 0
         self.phoneHeight = 0
 
+        self.resizeCaptureRectangle = None
+
         self.scene = QtWidgets.QGraphicsScene()
         self.files = []
         self.openShortcut = None
@@ -64,7 +67,7 @@ class Gasp(Ui_MainWindow):
         self.last_rotation = 0
 
 
-    def built(self):
+    def built(self, MainWindow):
         # self.openShortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+O"), self.centralwidget)
         # self.saveShortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+S"), self.centralwidget)
         # self.saveEnterShortcut = QtWidgets.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Space), self.centralwidget)
@@ -93,8 +96,12 @@ class Gasp(Ui_MainWindow):
         self.randomRightOffset.setDisabled(True)
         self.randomBottomOffset.setDisabled(True)
 
+        selectRectangleRadioGroup = PyQt5.Qt.QButtonGroup(MainWindow)
+        selectRectangleRadioGroup.addButton(self.selectCaptreArea, 0)
+        selectRectangleRadioGroup.addButton(self.selectClickArea, 1)
+        self.selectCaptreArea.setChecked(1)
+        self.selectCaptreArea.toggled.connect(self.toggleSelectArea)
         # self.selectFile.
-
         # self.openButton.clicked.connect(self.select_files)
         # self.rotateCwButton.clicked.connect(lambda: self.graphicsView.rotate_pixmap(45))
         # self.rotateCcwButton.clicked.connect(lambda: self.graphicsView.rotate_pixmap(-45))
@@ -106,6 +113,9 @@ class Gasp(Ui_MainWindow):
         # self.saveEnterShortcut.activated.connect(self.save_image)
         self.graphicsView.dropHandler = self.drop_handler
         self.graphicsView.setFocus()
+
+    def toggleSelectArea(self, e):
+        self.graphicsView.currentMode = 0 if e else 1
 
     def closing(self):
         pass
@@ -174,7 +184,8 @@ class Gasp(Ui_MainWindow):
         win32gui.MoveWindow(self.windowHandler, 0, 0, width, height, True)
 
     def catchScreen(self):
-        self.graphicsView.removeRect()
+        # self.graphicsView.removeRect()
+        self.graphicsView.removeRectAll()
         screen = None
         # return cv2 image type
         if self.curMode == constant.WINDOWSMODE:
@@ -191,10 +202,10 @@ class Gasp(Ui_MainWindow):
         self.scene.clear()
         screen = QtGui.QPixmap.fromImage(screen)
         pixmap_item = self.scene.addPixmap(screen)  # type: QtWidgets.QGraphicsPixmapItem
-        self.graphicsView.current_pixmap_item = pixmap_item
+        self.graphicsView.current_pixmap_item[self.graphicsView.currentMode] = pixmap_item
         self.graphicsView.rotate_pixmap(self.last_rotation)
         if self.last_rect is not None:
-            self.graphicsView.rect_item = self.scene.addRect(self.last_rect)
+            self.graphicsView.rect_item[self.graphicsView.currentMode] = self.scene.addRect(self.last_rect)
         rect = screen.rect()  # type: # QtCore.QRect
         rect.setWidth(rect.width() * 2)
         rect.setHeight(rect.height() * 2)
@@ -213,10 +224,13 @@ class Gasp(Ui_MainWindow):
             if self.curMode == constant.ABSMODE and (x1 < 0 or x2 < 0 or x1 + rightOffset > self.phoneWidth or x2 + bottomOffset > self.phoneHeight): res = False
         if not res:
             x1, x2, rightOffset, bottomOffset = -1, -1, -1, -1
-        self.pos_x.setText(str(round(x1)))
-        self.pos_y.setText(str(round(x2)))
-        self.randomRightOffset.setText(str(round(rightOffset)))
-        self.randomBottomOffset.setText(str(round(bottomOffset)))
+        if self.graphicsView.currentMode == 1:
+            self.pos_x.setText(str(round(x1)))
+            self.pos_y.setText(str(round(x2)))
+            self.randomRightOffset.setText(str(round(rightOffset)))
+            self.randomBottomOffset.setText(str(round(bottomOffset)))
+        else:
+            self.resizeCaptureRectangle = rect
         return res and rect is not None
 
     def toInt(self, text):
@@ -271,12 +285,13 @@ class Gasp(Ui_MainWindow):
             QtWidgets.QMessageBox.information(None, 'warning', f'请截图，再选择区域！')
             self.runningLog.setText("【warning】请截图，再选择区域！")
             return
-        process = f"{delayTime}_{randomDelayTime}_{pos_x}x{pos_y}_{randomRightOffset}_{randomBottomOffset}_{delayUpTime}_{delayRandomUpTime}_{randomOffsetWhenUp}_{loopLeastCount}_{loopLeastCount}_{loopDelayLeastTime}_{loopDelayRandomTime}_{endDelayLeastTime}_{endDelayRandomTime}_{threshold}_{useMatchingPosition}_{matchEvent}_{finishEvent}.png"
+        process = f"{delayTime}_{randomDelayTime}_{pos_x}x{pos_y}_{randomRightOffset}_{randomBottomOffset}_{delayUpTime}_{delayRandomUpTime}_{randomOffsetWhenUp}_{loopLeastCount}_{loopRandomCount}_{loopDelayLeastTime}_{loopDelayRandomTime}_{endDelayLeastTime}_{endDelayRandomTime}_{threshold}_{useMatchingPosition}_{matchEvent}_{finishEvent}.png"
         print(process)
 
         # 截取图片，保存
-        rect = self.graphicsView.rect_item.boundingRect()  # type
-        self.graphicsView.removeRect()
+        # rect = self.graphicsView.rect_item.boundingRect()  # type
+        rect = self.resizeCaptureRectangle
+        self.graphicsView.removeRectAll()
         outImg = QtGui.QPixmap(rect.width(), rect.height())
         painter = QtGui.QPainter(outImg)
         self.scene.setSceneRect(rect)

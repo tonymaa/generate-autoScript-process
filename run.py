@@ -11,7 +11,7 @@ def main():
     gasp = Gasp()
     app.aboutToQuit.connect(gasp.closing)
     gasp.setupUi(MainWindow)
-    gasp.built()
+    gasp.built(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
 
