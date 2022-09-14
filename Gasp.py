@@ -150,8 +150,8 @@ class Gasp(Ui_MainWindow):
             self.choose_phone.clear()
             self.choose_phone.addItem("Choose Phone")
             self.runningLog.setText(f'【info】 已切换到windows模式，点击截图后，选择窗口。')
-        self.save_template.setDisabled(True)
-        self.screentshot.setDisabled(True)
+        # self.save_template.setDisabled(True)
+        # self.screentshot.setDisabled(True)
 
     def selectDevice(self, e):
         self.selectedDeviceIndex = e
