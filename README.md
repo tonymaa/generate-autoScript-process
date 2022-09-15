@@ -1,4 +1,11 @@
-功能：
+### **简介**
+
+为Pyauto-Script提供可视化界面，快捷的生成截图以及点击信息。
+
+
+
+### **功能**
+
 1. 打开process（就是一个文件夹）
 2. 新建截图，让用户选择窗口，返回窗口截图
 3. 界面显示截图
@@ -43,5 +50,61 @@
 
 点击adb mode 闪退问题：
     * 由于缺少 【AdbWinApi.dll】
-    * 将【AdbWinApi.dll】放置到 C:\Windows\SysWOW64 目录下，即可解决
-    
+        * 将【AdbWinApi.dll】放置到 C:\Windows\SysWOW64 目录下，即可解决
+
+
+
+### **软件界面**
+
+![image-20220915095321164](README.assets/image-20220915095321164.png)
+
+
+
+### **软件使用**
+
+#### 1、选择一个存放process的文件夹
+
+![image-20220915095407876](README.assets/image-20220915095407876.png)
+
+![image-20220915095434572](README.assets/image-20220915095434572.png)
+
+#### 2、选择windows还是连接手机
+
+![image-20220915095522567](README.assets/image-20220915095522567.png)
+
+##### 2.1、当选择Windows Mode
+
+1. 填写窗口的width，height，之后点击choose window选择窗口
+
+![image-20220915095643255](README.assets/image-20220915095643255.png)
+
+2. 选择窗口后，窗口会被自动缩放成指定尺寸
+
+![image-20220915095731126](README.assets/image-20220915095731126.png)
+
+
+
+##### 2.2、当选择Adb Mode
+
+![image-20220915101039486](README.assets/image-20220915101039486.png)
+
+![image-20220915101056108](README.assets/image-20220915101056108.png)
+
+#### 3、点击截屏，截取窗口图片
+
+![image-20220915095825727](README.assets/image-20220915095825727.png)
+
+#### 4、选取连个区域，红框为裁剪图像的范围，蓝框为鼠标随机点击的范围
+
+![image-20220915100047974](README.assets/image-20220915100047974.png)
+
+#### 5、填写点击的参数
+
+![image-20220915100117853](README.assets/image-20220915100117853.png)
+
+#### 6、最后保存
+
+![image-20220915100135249](README.assets/image-20220915100135249.png)
+
+![image-20220915100209219](README.assets/image-20220915100209219.png)
+

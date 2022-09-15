@@ -2,7 +2,7 @@ import PyQt5.Qt
 import cv2
 import win32gui
 from PyQt5 import QtCore, QtWidgets, QtGui
-from PyQt5.QtGui import QImage
+from PyQt5.QtGui import QImage, QIcon
 from subprocess import Popen, PIPE
 from program.GaspUi import Ui_MainWindow
 import os
@@ -72,6 +72,9 @@ class Gasp(Ui_MainWindow):
         # self.saveShortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+S"), self.centralwidget)
         # self.saveEnterShortcut = QtWidgets.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Space), self.centralwidget)
         # self.skipShortcut = QtWidgets.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Tab), self.centralwidget)
+
+        MainWindow.setWindowTitle("Generate Process For Pyauto-Script")
+        MainWindow.setWindowIcon(QIcon("./image/favorite.png"))
 
         self.graphicsView.setScene(self.scene)
         self.scene.setBackgroundBrush(QtCore.Qt.white)
