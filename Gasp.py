@@ -1,18 +1,16 @@
 import PyQt5.Qt
 import cv2
-import win32gui
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtGui import QImage, QIcon
 from subprocess import Popen, PIPE
 from program.GaspUi import Ui_MainWindow
-import os
+from os.path import join, exists
 import constant
 from numpy import array
 from utils.HandleUtils import HandleUtils
 from utils.ImageUtils import ImageUtils
 from utils.ScreenCaptureUtils import ScreenCaptureUtils
-from win32gui import SetForegroundWindow, GetWindowRect
-import win32com
+from win32gui import SetForegroundWindow, GetWindowRect, MoveWindow
 from PIL import ImageGrab
 import numpy as np
 
@@ -184,7 +182,7 @@ class Gasp(Ui_MainWindow):
             width = 800
         self.windowWidth = width
         self.windowHeight = height
-        win32gui.MoveWindow(self.windowHandler, 0, 0, width, height, True)
+        MoveWindow(self.windowHandler, 0, 0, width, height, True)
 
     def catchScreen(self):
         # self.graphicsView.removeRect()
@@ -248,7 +246,9 @@ class Gasp(Ui_MainWindow):
         return res
 
     def saveTemplate(self):
-        if self.curProcess is None: self.select_dir()
+        if self.curProcess is None:
+            self.select_dir()
+            if self.curProcess is None: return
         # 获取数据
         delayTime = self.toInt(self.delayTime.text())
         if delayTime < 0: return
@@ -299,16 +299,16 @@ class Gasp(Ui_MainWindow):
         painter = QtGui.QPainter(outImg)
         self.scene.setSceneRect(rect)
         self.scene.render(painter)
-        savePath = os.path.join(self.curProcess, process)
+        savePath = join(self.curProcess, process)
         outImg.save(savePath, "PNG")
         painter.end()
 
         # 生成事件脚本文件 xxx.py
-        matchEPath = os.path.join(self.curProcess, matchEvent + ".py")
-        if len(matchEvent) != 0 and matchEvent != "None" and not os.path.exists(matchEPath):
+        matchEPath = join(self.curProcess, matchEvent + ".py")
+        if len(matchEvent) != 0 and matchEvent != "None" and not exists(matchEPath):
             self.generatePyFile(matchEPath)
-        finishEPath = os.path.join(self.curProcess, finishEvent + ".py")
-        if len(finishEvent) != 0 and finishEvent != "None" and not os.path.exists(finishEPath):
+        finishEPath = join(self.curProcess, finishEvent + ".py")
+        if len(finishEvent) != 0 and finishEvent != "None" and not exists(finishEPath):
             self.generatePyFile(finishEPath)
 
         self.runningLog.setText(f"【success】已保存到: {savePath}")

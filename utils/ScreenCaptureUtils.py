@@ -3,7 +3,6 @@
 # @Version : Python3.7.6
 # @MIT License Copyright (c) 2022 ACE
 
-import time
 from os.path import abspath, dirname
 from subprocess import Popen, PIPE
 
@@ -68,7 +67,6 @@ class ScreenCaptureUtils:
             shell = win32com.client.Dispatch("WScript.Shell")
             shell.SendKeys('%')
             SetForegroundWindow(hwnd)  # 窗口置顶
-        # time.sleep(0.2)  # 置顶后等0.2秒再截图
         x1, y1, x2, y2 = GetWindowRect(hwnd)  # 获取窗口坐标
         grab_image = ImageGrab.grab((x1, y1, x2, y2))  # 用PIL方法截图
         im_cv2 = array(grab_image)  # 转换为cv2的矩阵格式

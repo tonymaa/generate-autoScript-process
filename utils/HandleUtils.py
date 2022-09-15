@@ -3,7 +3,7 @@
 # @Version : Python3.7.6
 # @MIT License Copyright (c) 2022 ACE
 
-import winsound
+
 from os import system
 from re import search
 from os.path import abspath, dirname
@@ -197,15 +197,15 @@ class HandleUtils:
         print("<br>-----------------------------------------------------------")
         return hand_win_title, hand_num
 
-    @staticmethod
-    def play_sounds(flag):
-        """播放声音"""
-        if flag == "warming":
-            sound = abspath(dirname(__file__)) + r'\sounds\\warming.wav'
-            winsound.PlaySound(sound, winsound.SND_ALIAS)
-        elif flag == "end":
-            sound = abspath(dirname(__file__)) + r'\sounds\\end.wav'
-            winsound.PlaySound(sound, winsound.SND_ALIAS)
+    # @staticmethod
+    # def play_sounds(flag):
+    #     """播放声音"""
+    #     if flag == "warming":
+    #         sound = abspath(dirname(__file__)) + r'\sounds\\warming.wav'
+    #         winsound.PlaySound(sound, winsound.SND_ALIAS)
+    #     elif flag == "end":
+    #         sound = abspath(dirname(__file__)) + r'\sounds\\end.wav'
+    #         winsound.PlaySound(sound, winsound.SND_ALIAS)
 
     @staticmethod
     def find_windows_by_title(title):
